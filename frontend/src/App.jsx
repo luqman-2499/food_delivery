@@ -29,7 +29,10 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // SERVER BACKEND URL
-export const serverUrl = "http://localhost:8000";
+export const serverUrl =
+  window.location.hostname === "localhost"
+    ? "http://localhost:8000"
+    : "https://food-delivery-4c1n.onrender.com";
 
 function App() {
   const loading = useGetCurrentUser();
