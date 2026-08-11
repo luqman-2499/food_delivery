@@ -36,7 +36,6 @@ function ForgotPassword() {
         { email },
         { withCredentials: true },
       );
-      console.log(result);
       setErr("");
       toast.success(result.data.message || "OTP sent successfully");
       setStep(2);
@@ -63,7 +62,6 @@ function ForgotPassword() {
         { email, otp },
         { withCredentials: true },
       );
-      console.log(result);
       if (result.data) {
         setErr("");
         toast.success(result.data.message || "OTP verified");
@@ -93,7 +91,6 @@ function ForgotPassword() {
         { withCredentials: true },
       );
       setErr("");
-      console.log(result);
       setLoading(false);
       toast.success(result.data.message || "Password reset successful");
       navigate("/signin");

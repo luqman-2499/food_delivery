@@ -52,7 +52,7 @@ function Nav() {
       );
       dispatch(setSearchItems(result.data));
     } catch (error) {
-      console.log(result.response.data);
+      console.log(error);
     }
   };
 

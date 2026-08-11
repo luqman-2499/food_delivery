@@ -30,24 +30,6 @@ function Shop() {
 
   return (
     <div className="min-h-screen bg-orange-50">
-      {/* {shop && (
-        <div className="relative w-full h-64 md:h-80 lg:h-96">
-          <img src={shop.image} className="w-full h-full object-cover" alt="" />
-          <div className="absolute inset-0 bg-linear-to-t from-black/70 to-black/30 flex flex-col jsutify-center items-center px-4">
-            <FaStore className="text-white text-4xl mb-3 drop-shadow-md mt-10" />
-            <h1 className="text-3xl font-extrabold md:text-5xl text-white drop-shadow-lg">
-              {shop.name}
-            </h1>
-            <div className="flex items-center gap-3">
-              <FaLocationDot size={24} color="red" />
-              <p className="text-lg font-medium text-gray-200 mt-5">
-                {shop.address}
-              </p>
-            </div>
-          </div>
-        </div>
-      )} */}
-
       {shop && (
         <div className="max-w-6xl mx-auto px-4 py-6">
           <div className="bg-orange-100 rounded-3xl shadow-lg overflow-hidden grid md:grid-cols-2 items-center">

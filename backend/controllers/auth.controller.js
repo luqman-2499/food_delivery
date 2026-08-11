@@ -97,7 +97,11 @@ export const signIn = async (req, res) => {
 
 export const signOut = async (req, res) => {
   try {
-    res.clearCookie("token"); // The token stored is in varaible token so....
+    res.clearCookie("token", {
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    httpOnly: true,
+  }); // The token stored is in varaible token so....
     return res.status(200).json({ message: "Logout Successfully" });
   } catch (error) {
     return res.status(500).json(`LogOut Error ${error}`);

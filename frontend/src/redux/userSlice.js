@@ -93,6 +93,7 @@ const userSlice = createSlice({
     resetCart: (state) => {
       state.cartItems = [];
       state.totalAmount = 0;
+      localStorage.removeItem("cartItems");
     },
 
     setMyOrders: (state, action) => {

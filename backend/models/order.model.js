@@ -6,7 +6,7 @@ const shopOrderItemSchema = new mongoose.Schema(
     item: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Item",
-      reqquired: true,
+      required: true,
     },
     // Shortcut way only if we have single value for field like here only number so,
     name: String,

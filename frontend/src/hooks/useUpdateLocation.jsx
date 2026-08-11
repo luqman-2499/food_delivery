@@ -23,14 +23,12 @@ function useUpdateLocation() {
         { lat, long },
         { withCredentials: true },
       );
-      console.log(result.data);
     };
 
     // Using navigator whenever lat, long gets changed for that we use WatchPosition() IS USED. Starts listening to location changes continuously.
     const watchId = navigator.geolocation.watchPosition((pos) => {
       updateLocation(pos.coords.latitude, pos.coords.longitude);
-      return () => navigator.geolocation.clearWatch(watchId);
-      //   It starts location tracking and properly stops it when component is removed.
+      // return () => navigator.geolocation.clearWatch(watchId);
     });
     // It ensures that the active location watcher is properly stopped when the component/page is no longer in use.
     return () => navigator.geolocation.clearWatch(watchId);

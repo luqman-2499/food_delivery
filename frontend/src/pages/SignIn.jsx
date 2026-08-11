@@ -65,21 +65,26 @@ function SignIn() {
   // FIREBASE GOOGLE AUTHENTICATION SETUP
 
   const handleGoogleAuth = async () => {
+  try {
     const provider = new GoogleAuthProvider();
     const result = await signInWithPopup(auth, provider);
-    try {
-      const { data } = await axios.post(
-        `${serverUrl}/api/auth/google-auth`,
-        {
-          email: result.user.email,
-        },
-        { withCredentials: true },
-      );
-      dispatch(setUserData(data));
-    } catch (error) {
-      toast.error("Google login failed");
-    }
-  };
+
+    const { data } = await axios.post(
+      `${serverUrl}/api/auth/google-auth`,
+      {
+        email: result.user.email,
+      },
+      { withCredentials: true },
+    );
+
+    dispatch(setUserData(data));
+    navigate("/");
+  } catch (error) {
+    toast.error(
+      error?.response?.data?.message || "Google login failed"
+    );
+  }
+};
 
   return (
     // DIV - MAIN COLOR OF PAGE

@@ -77,27 +77,31 @@ function SignUp() {
   // FIREBASE GOOGLE AUTHENTICATION SETUP
 
   const handleGoogleAuth = async () => {
+  try {
     if (!mobile) {
       return setErr("Mobile Number is Required !");
     }
+
     const provider = new GoogleAuthProvider();
     const result = await signInWithPopup(auth, provider);
-    try {
-      const { data } = await axios.post(
-        `${serverUrl}/api/auth/google-auth`,
-        {
-          fullName: result.user.displayName,
-          email: result.user.email,
-          role,
-          mobile,
-        },
-        { withCredentials: true },
-      );
-      dispatch(setUserData(data));
-    } catch (error) {
-      toast.error("Google signup failed");
-    }
-  };
+
+    const { data } = await axios.post(
+      `${serverUrl}/api/auth/google-auth`,
+      {
+        fullName: result.user.displayName,
+        email: result.user.email,
+        role,
+        mobile,
+      },
+      { withCredentials: true },
+    );
+
+    dispatch(setUserData(data));
+    navigate("/");
+  } catch (error) {
+    toast.error("Google signup failed");
+  }
+};
 
   return (
     // DIV - MAIN COLOR OF PAGE

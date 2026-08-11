@@ -13,6 +13,7 @@ let instance = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
   key_secret: process.env.RAZORPAY_KEY_SECRET,
 });
+
 // PLACING ORDERS OF USERS
 export const placeOrder = async (req, res) => {
   try {
@@ -26,12 +27,13 @@ export const placeOrder = async (req, res) => {
 
     // If NO Data in Delivery Address
     if (
-      !deliveryAddress.text ||
-      !deliveryAddress.latitude ||
-      !deliveryAddress.longitude
-    ) {
-      return res.status(400).json({ message: "Incomplete Delivery Address" });
-    }
+  !deliveryAddress ||
+  !deliveryAddress.text ||
+  deliveryAddress.latitude == null ||
+  deliveryAddress.longitude == null
+) {
+  return res.status(400).json({ message: "Incomplete Delivery Address" });
+}
 
     // Push Different Items based on their Shops
     const groupItemsByShop = {}; // Initial Empty, Later key: shopId  value: [item]
@@ -244,6 +246,9 @@ export const getMyOrders = async (req, res) => {
     // Find USER from userId
 
     const user = await User.findById(req.userId);
+    if (!user) {
+  return res.status(404).json({ message: "User not Found" });
+}
 
     // ROLE BASED GET ORDERS
 
@@ -488,6 +493,9 @@ export const acceptOrder = async (req, res) => {
     }
     // If someone accepting the order which is already accepted by previous delivery guy
     if (assignment.status !== "brodcasted") {
+      if (!assignment.brodcastedTo.some((id) => String(id) === String(req.userId))) {
+  return res.status(403).json({ message: "You are not assigned to this order" });
+}
       return res.status(400).json({ message: "Assignment Expired !!!" });
     }
     const alreadyAssigned = await DeliveryAssignment.findOne({
@@ -512,6 +520,9 @@ export const acceptOrder = async (req, res) => {
     }
 
     let shopOrder = order.shopOrders.id(assignment.shopOrderId);
+    if (!shopOrder) {
+  return res.status(404).json({ message: "Shop Order Not Found" });
+}
     shopOrder.assignedDeliveryBoy = req.userId;
 
     await order.save();
@@ -530,6 +541,7 @@ export const getCurrentOrder = async (req, res) => {
   try {
     const assignment = await DeliveryAssignment.findOne({
       status: "assigned",
+      assignedTo: req.userId,
     })
       .populate("shop", "name")
       .populate("assignedTo", "fullName email mobile location")
@@ -619,9 +631,12 @@ export const sentDeliveryOtp = async (req, res) => {
   try {
     const { orderId, shopOrderId } = req.body;
     const order = await Order.findById(orderId).populate("user");
+    if (!order) {
+      return res.status(404).json({ message: "Order Not Found" });
+    }
     const shopOrder = order.shopOrders.id(shopOrderId);
-    if (!order || !shopOrder) {
-      return res.status(400).json({ message: "Enter Valid Order/shopOrderId" });
+    if (!shopOrder) {
+      return res.status(400).json({ message: "ShopOrder not Found" });
     }
     const otp = Math.floor(1000 + Math.random() * 9000).toString();
     shopOrder.deliveryOtp = otp;
@@ -644,10 +659,15 @@ export const sentDeliveryOtp = async (req, res) => {
 export const verifyDeliveryOtp = async (req, res) => {
   try {
     const { orderId, shopOrderId, otp } = req.body;
+
     const order = await Order.findById(orderId).populate("user");
+    if (!order) {
+      return res.status(404).json({ message: "Order Not Found" });
+    }
+
     const shopOrder = order.shopOrders.id(shopOrderId);
-    if (!order || !shopOrder) {
-      return res.status(400).json({ message: "Enter Valid Order/shopOrderId" });
+    if (!shopOrder) {
+      return res.status(404).json({ message: "Shop Order Not Found" });
     }
     if (
       shopOrder.deliveryOtp !== otp ||

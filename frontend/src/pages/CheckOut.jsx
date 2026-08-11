@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { MapContainer, Marker, TileLayer, useMap } from "react-leaflet";
 import { useDispatch, useSelector } from "react-redux";
 import "leaflet/dist/leaflet.css";
+import L from "leaflet";
 import { setAddress, setLocation } from "../redux/mapSlice";
 import axios from "axios";
 import { serverUrl } from "../App";
@@ -18,13 +19,44 @@ import { addMyOrder } from "../redux/userSlice";
 import { toast } from "react-toastify";
 import { resetCart } from "../redux/userSlice";
 
+import markerIcon from "leaflet/dist/images/marker-icon.png";
+import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
+import markerShadow from "leaflet/dist/images/marker-shadow.png";
+
+const defaultIcon = L.icon({
+  iconUrl: markerIcon,
+  iconRetinaUrl: markerIcon2x,
+  shadowUrl: markerShadow,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
+});
+
+L.Marker.prototype.options.icon = defaultIcon;
+
+// function RecenterMap({ location }) {
+//   if (location.lat && location.long) {
+//     const map = useMap(); // useMap hook to be used outside ONLY ! used to reset map
+//     map.setView([location.lat, location.long], 16, { animate: true }); // used to show recentred updated map
+//   }
+//   return null;
+// }
+
 function RecenterMap({ location }) {
-  if (location.lat && location.long) {
-    const map = useMap(); // useMap hook to be used outside ONLY ! used to reset map
-    map.setView([location.lat, location.long], 16, { animate: true }); // used to show recentred updated map
-  }
+  const map = useMap();
+
+  useEffect(() => {
+    if (location.lat && location.long) {
+      map.setView([location.lat, location.long], 16, {
+        animate: true,
+      });
+    }
+  }, [location, map]);
+
   return null;
 }
+
 
 function CheckOut() {
   const navigate = useNavigate();

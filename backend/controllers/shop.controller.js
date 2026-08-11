@@ -72,7 +72,7 @@ export const getShopByCity = async (req, res) => {
   try {
     const { city } = req.params; // params means take city from URL
     // Match the uesr city with current city
-    const shops = await Shop.find({
+    let shops = await Shop.find({
       city: { $regex: new RegExp(`^${city}$`, "i") },
     }).populate("items");
 
@@ -83,9 +83,9 @@ export const getShopByCity = async (req, res) => {
       }).populate("items");
     }
 
-    if (!shops) {
-      return res.status(400).json({ message: "Shops Not Found" });
-    }
+    // if (!shops) {
+    //   return res.status(400).json({ message: "Shops Not Found" });
+    // }
     return res.status(200).json(shops);
   } catch (error) {
     return res.status(500).json({ message: `Get Shop By City Error ${error}` });
