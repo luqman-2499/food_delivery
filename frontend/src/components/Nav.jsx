@@ -69,7 +69,7 @@ function Nav() {
     <div className="w-full h-20 flex items-center justify-between md:justify-center gap-8 px-5 fixed top-0 z-9999 bg-[#fff9f6] overflow-visible">
       {/* MOBILE FULL SEARCH BAR BOX */}
 
-      {showSearch && userData.role === "user" && (
+      {showSearch && userData?.role === "user" && (
         <div className="w-[90%] h-20 bg-white shadow-xl rounded-lg items-center gap-5 flex fixed top-20 left-[5%] md:hidden">
           {/* MOBILE LOCATION ICON AND CITY TEXT */}
 
@@ -99,7 +99,7 @@ function Nav() {
       <h1 className="text-3xl font-bold mb-2 text-[#ff4d2d]">Snap Delivery</h1>
 
       {/* DESKTOP SEARCHBAR  */}
-      {userData.role === "user" && (
+      {userData?.role === "user" && (
         <div className="md:w-[60%] lg:w-[40%] h-18 bg-white shadow-xl rounded-lg items-center gap-5 hidden md:flex">
           <div className="flex items-center w-[30%] overflow-hidden gap-3 px-3 border-r-2 border-gray-400">
             <FaLocationDot size={24} className="text-[#ff4d2d]" />
@@ -126,7 +126,7 @@ function Nav() {
       <div className="flex items-center gap-5">
         {/* MOBILE SEARCH ICON TOGGLE */}
 
-        {userData.role === "user" &&
+        {userData?.role === "user" &&
           (showSearch ? (
             <IoClose
               size={28}
@@ -142,7 +142,7 @@ function Nav() {
           ))}
 
         {/* OWNER DASHBAORD ADD FOOD ITEMS BUTTON DESKTOP */}
-        {userData.role === "owner" ? (
+        {userData?.role === "owner" ? (
           <>
             {myShopData && (
               <>
@@ -189,7 +189,7 @@ function Nav() {
         ) : (
           <>
             {/* CART */}
-            {userData.role === "user" && (
+            {(!userData || userData?.role === "user") && (
               <div
                 className="relative cursor-pointer"
                 onClick={() => navigate("/cart")}
@@ -214,22 +214,31 @@ function Nav() {
 
         {/* PROFILE ICON */}
 
-        <div
-          className="w-8 h-8 rounded-full flex items-center justify-center bg-orange-600 text-white text-lg shadow-lg font-semibold cursor-pointer"
-          onClick={() => setShowInfo((prev) => !prev)}
-        >
-          {userData?.fullName?.slice(0, 1)}
-        </div>
+        {userData ? (
+          <div
+            className="w-8 h-8 rounded-full flex items-center justify-center bg-orange-600 text-white text-lg shadow-lg font-semibold cursor-pointer shrink-0"
+            onClick={() => setShowInfo((prev) => !prev)}
+          >
+            {userData.fullName?.slice(0, 1)}
+          </div>
+        ) : (
+          <button
+            className="text-orange-600 font-semibold cursor-pointer whitespace-nowrap"
+            onClick={() => navigate("/signin")}
+          >
+            Login
+          </button>
+        )}
 
         {/* PROFILE DROPDOWN */}
 
-        {showInfo && (
+        {userData && showInfo && (
           <div className="fixed top-20 right-3 md:right-[10%] lg:right-[25%] w-50 bg-white shadow-2xl rounded-xl p-5 flex flex-col gap-3 z-9999">
             <div className="text-[17px] font-semibold text-black">
               {userData?.fullName}
             </div>
 
-            {userData.role === "user" && (
+            {userData?.role === "user" && (
               <div
                 className="text-orange-600 cursor-pointer font-semibold"
                 onClick={() => navigate("/my-orders")}

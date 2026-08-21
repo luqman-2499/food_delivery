@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { FaRegEye } from "react-icons/fa6";
 import { FaRegEyeSlash } from "react-icons/fa6";
 import { FcGoogle } from "react-icons/fc";
+import { IoArrowBack } from "react-icons/io5";
 import axios from "axios";
 import { ClipLoader } from "react-spinners";
 import { serverUrl } from "../App";
@@ -92,6 +93,13 @@ function SignIn() {
       className="min-h-screen w-full flex items-center justify-center p-4"
       style={{ backgroundColor: bgColor }}
     >
+      {/* BACK Button  */}
+      <div
+      className="absolute top-5 left-2/12 z-10 cursor-pointer"
+      onClick={() => navigate("/")}
+    >
+      <IoArrowBack size={35} className="text-orange-600" />
+    </div>
       <div
         className="bg-white rounded-xl shadow-lg w-full max-w-md p-8 border"
         style={{ borderColor: borderColor, borderStyle: "solid" }}

@@ -83,12 +83,11 @@ function App() {
         ></Route>
 
         <Route
-          path="/"
-          element={userData ? <Home /> : <Navigate to={"/signin"} />}
+          path="/" element={<Home />}
         ></Route>
 
         <Route
-          path="create-edit-shop"
+          path="/create-edit-shop"
           element={userData ? <CreateEditShop /> : <Navigate to={"/signin"} />}
         ></Route>
 
@@ -103,19 +102,18 @@ function App() {
         ></Route>
 
         <Route
-          path="/cart"
-          element={userData ? <Cart /> : <Navigate to={"/signin"} />}
+          path="/cart" element={<Cart />}
         ></Route>
 
         <Route
-          path="/checkout"
-          element={userData ? <CheckOut /> : <Navigate to={"/signin"} />}
+          path="/checkout" element={<CheckOut />}
         ></Route>
 
         <Route
           path="/order-placed"
           element={userData ? <OrderPlaced /> : <Navigate to={"/signin"} />}
-        ></Route>
+        >  
+        </Route>
 
         <Route
           path="/my-orders"
