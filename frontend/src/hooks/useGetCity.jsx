@@ -36,7 +36,12 @@ function useGetCity() {
         ),
       );
       dispatch(setAddress(result?.data?.results[0].address_line2)); // Store the Address in REDUX in address key of mapSlice...Delivery Address at Checkout. Someties address could be same as current Address
-    });
+    }, ()=> {
+      // If location is denied/unavailable
+      dispatch(setCurrentCity("Dubai"));
+      dispatch(setCurrentState("Dubai"));
+    },
+  );
   }, []);
 }
 
